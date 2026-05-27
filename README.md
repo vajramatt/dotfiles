@@ -16,7 +16,7 @@ Then open a new terminal (or `exec zsh`).
 1. Installs **Homebrew** if it's missing.
 2. `brew install starship jq` and `brew install --cask ghostty`.
 3. Symlinks the configs into place (backing up anything already there to `*.bak.<timestamp>`):
-   - `~/.config/starship.toml` → minimal prompt: working directory then `$`
+   - `~/.config/starship.toml` → two-line prompt: `╭─` directory + git branch/status, then `╰─☸` character
    - `~/.config/ghostty/config` → TokyoNight Night theme
    - `~/.claude/hooks/statusline.sh` → TokyoNight statusline for Claude Code
 4. Merges the `statusLine` block into `~/.claude/settings.json` (rest of the file is left untouched; a `.bak` is kept).

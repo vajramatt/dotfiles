@@ -1,15 +1,11 @@
-# Minimal prompt: working directory, then a "$"
-add_newline = false
-
-format = "$directory$character"
-
-[directory]
-# Show the full path (no truncation), with ~ for home
-truncation_length = 0
-truncate_to_repo = false
-style = "bold cyan"
-format = "[$path]($style) "
 
 [character]
-success_symbol = "[\\$](bold green)"
-error_symbol = "[\\$](bold red)"
+success_symbol = "[╰─☸](bold cyan)"
+error_symbol = "[╰─☸](bold red)"
+
+[line_break]
+disabled = false
+
+[format]
+format = """╭─$directory$git_branch$git_status
+$character """
