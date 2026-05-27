@@ -1,0 +1,5 @@
+# Ghostty configuration
+# Docs: https://ghostty.org/docs/config
+
+# TokyoNight Night — matches the Claude statusline palette
+theme = "TokyoNight Night"

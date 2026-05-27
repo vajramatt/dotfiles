@@ -1,0 +1,15 @@
+# Minimal prompt: working directory, then a "$"
+add_newline = false
+
+format = "$directory$character"
+
+[directory]
+# Show the full path (no truncation), with ~ for home
+truncation_length = 0
+truncate_to_repo = false
+style = "bold cyan"
+format = "[$path]($style) "
+
+[character]
+success_symbol = "[\\$](bold green)"
+error_symbol = "[\\$](bold red)"
