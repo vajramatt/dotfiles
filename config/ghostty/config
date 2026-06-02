@@ -3,3 +3,7 @@
 
 # TokyoNight Night — matches the Claude statusline palette
 theme = "TokyoNight Night"
+
+# JetBrainsMono Nerd Font — glyphs for eza icons + starship prompt
+font-family = "JetBrainsMono Nerd Font Mono"
+font-size = 14

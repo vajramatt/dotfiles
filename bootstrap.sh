@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Bootstrap a Mac with my terminal setup:
-#   - Homebrew + starship, jq, ghostty
+#   - Homebrew + starship, jq, zsh-autosuggestions, zsh-syntax-highlighting, ghostty
 #   - Starship prompt config  (~/.config/starship.toml)
 #   - Ghostty config, TokyoNight Night  (~/.config/ghostty/config)
 #   - Claude Code TokyoNight statusline  (~/.claude/hooks/statusline.sh + settings.json)
@@ -45,9 +45,10 @@ fi
 [ -x /usr/local/bin/brew ]    && eval "$(/usr/local/bin/brew shellenv)"
 
 # 2. Packages --------------------------------------------------------------
-log "installing packages: starship, jq, ghostty..."
-brew install starship jq
+log "installing packages: starship, jq, eza, zsh plugins, ghostty..."
+brew install starship jq eza zsh-autosuggestions zsh-syntax-highlighting
 brew install --cask ghostty || log "ghostty cask already present (skipping)"
+brew install --cask font-jetbrains-mono-nerd-font || log "nerd font cask already present (skipping)"
 
 # 3. Starship prompt -------------------------------------------------------
 link "$REPO_DIR/config/starship.toml" "$CONFIG_DIR/starship.toml"
@@ -69,12 +70,32 @@ jq --arg cmd "$CLAUDE_DIR/hooks/statusline.sh" \
    "$SETTINGS" > "$tmp" && mv "$tmp" "$SETTINGS"
 log "merged statusLine into $SETTINGS (backup: $SETTINGS.bak)"
 
-# 6. Ensure starship initializes in zsh -----------------------------------
+# 6. Ensure starship + zsh plugins initialize in zsh ----------------------
 ZSHRC="$HOME/.zshrc"
 touch "$ZSHRC"
-if ! grep -q 'starship init zsh' "$ZSHRC"; then
-  printf '\neval "$(starship init zsh)"\n' >> "$ZSHRC"
-  log "added 'starship init zsh' to $ZSHRC"
-fi
+
+# Append a line to ~/.zshrc only if a marker isn't already present.
+append_once() {  # $1 = grep marker, $2 = line to append
+  if ! grep -q "$1" "$ZSHRC"; then
+    printf '\n%s\n' "$2" >> "$ZSHRC"
+    log "added to $ZSHRC: $2"
+  fi
+}
+
+# Use the literal ${HOMEBREW_PREFIX:-/opt/homebrew} so it resolves at shell
+# startup (works on both Apple Silicon and Intel) without a slow `brew --prefix`.
+BREW='${HOMEBREW_PREFIX:-/opt/homebrew}'
+append_once 'zsh-autosuggestions'     "source \"$BREW/share/zsh-autosuggestions/zsh-autosuggestions.zsh\""
+append_once 'starship init zsh'       'eval "$(starship init zsh)"'
+
+# eza — modern ls replacement (colors, icons, git status). Add aliases as one block.
+append_once '# eza aliases' '# eza aliases
+alias ls='\''eza --group-directories-first'\''
+alias la='\''eza -a --group-directories-first'\''
+alias ll='\''eza -la --git --icons --group-directories-first'\''
+alias lt='\''eza --tree --level=2'\'''
+
+# zsh-syntax-highlighting must be sourced LAST — append it after everything else.
+append_once 'zsh-syntax-highlighting' "source \"$BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\""
 
 log "done — open a new terminal or run: exec zsh"

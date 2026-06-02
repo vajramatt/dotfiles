@@ -14,13 +14,13 @@ Then open a new terminal (or `exec zsh`).
 ## What `bootstrap.sh` does
 
 1. Installs **Homebrew** if it's missing.
-2. `brew install starship jq` and `brew install --cask ghostty`.
+2. `brew install starship jq zsh-autosuggestions zsh-syntax-highlighting` and `brew install --cask ghostty`.
 3. Symlinks the configs into place (backing up anything already there to `*.bak.<timestamp>`):
    - `~/.config/starship.toml` → two-line prompt: `╭─` directory + git branch/status, then `╰─☸` character
    - `~/.config/ghostty/config` → TokyoNight Night theme
    - `~/.claude/hooks/statusline.sh` → TokyoNight statusline for Claude Code
 4. Merges the `statusLine` block into `~/.claude/settings.json` (rest of the file is left untouched; a `.bak` is kept).
-5. Ensures `eval "$(starship init zsh)"` is in `~/.zshrc`.
+5. Ensures `~/.zshrc` sources **zsh-autosuggestions** (fish-style ghost text), `eval "$(starship init zsh)"`, and **zsh-syntax-highlighting** (sourced last, as it requires).
 
 It's **idempotent** — safe to re-run.
 
