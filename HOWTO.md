@@ -28,6 +28,12 @@ exec zsh                # reload the shell
 line if its marker isn't already in `~/.zshrc`, and `brew install` no-ops when a package is
 present. Re-running it is always safe.
 
+> ⚠️ **The flip side of idempotence:** `bootstrap.sh` will **not** update an alias / `source` line
+> whose marker is *already* in `~/.zshrc`. So if the change you're syncing **edited an existing**
+> `append_once` block (e.g. added a flag to the `ls` alias) rather than adding a brand-new one,
+> `git pull` + `./bootstrap.sh` does **nothing** on this machine — you must **hand-edit `~/.zshrc`**
+> to match. See [Changing an existing alias](#changing-an-existing-alias) below.
+
 ## Making a change here (and what it requires downstream)
 
 - **Tweaking a symlinked config** (prompt, terminal, statusline): just edit the file under
@@ -46,6 +52,21 @@ present. Re-running it is always safe.
   - ⚠️ `zsh-syntax-highlighting` must be the **last** thing sourced in `~/.zshrc`. When adding new
     `append_once` blocks, add them **before** the syntax-highlighting line in the script.
 
+<a name="changing-an-existing-alias"></a>
+- **Changing an *existing* alias / `source` line / `append_once` block** — this is the sharp edge,
+  and it bites differently from *adding* one. Editing the block in `bootstrap.sh` only helps
+  **fresh** machines. On any machine that has already been bootstrapped, the block's marker is
+  *already* in `~/.zshrc`, so `append_once` sees it and **skips** — re-running `bootstrap.sh` will
+  **not** rewrite the line, and `git pull` can't either (`~/.zshrc` isn't a symlink). So editing an
+  existing block is always a **two-place change**:
+  1. the `append_once` block in `bootstrap.sh` — so **future** machines get it, and so the repo
+     stays the source of truth;
+  2. the live `~/.zshrc` **by hand** on **every already-bootstrapped machine** — so they actually
+     pick it up.
+  - Worked example: adding `--icons` to the `ls`/`la`/`lt` aliases (commit `f641992`) had to touch
+    both `bootstrap.sh` *and* each machine's `~/.zshrc` directly, for exactly this reason. Updating
+    only `bootstrap.sh` would have silently no-op'd on machines that were already set up.
+
 ```bash
 cd ~/code/dotfiles && git add -A && git commit -m "describe change" && git push
 ```
@@ -56,6 +77,11 @@ cd ~/code/dotfiles && git add -A && git commit -m "describe change" && git push
   as a repo change: commit it.
 - **Before assuming an alias/tool exists on a fresh machine**, check `bootstrap.sh`, not just the
   configs. A config can reference a font/glyph that only `bootstrap.sh` installs.
+- **Editing an existing `append_once` block ≠ propagating it.** The marker-gate means re-running
+  `bootstrap.sh` *skips* any block already present in `~/.zshrc`. A content change to an existing
+  alias/`source` line must therefore be applied to the live `~/.zshrc` **by hand** on each
+  bootstrapped machine — updating only `bootstrap.sh` silently no-ops for them. (Adding a *new*
+  block with a *new* marker is fine — that's what bootstrap is for.)
 - **Font names matter:** Ghostty needs the exact family name it reports from
   `ghostty +list-fonts` (currently `JetBrainsMono Nerd Font Mono`), not the cask name.
 - **Verify after editing** `starship.toml` by rendering, not by `starship config` (which opens an

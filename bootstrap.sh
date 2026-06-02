@@ -74,8 +74,13 @@ log "merged statusLine into $SETTINGS (backup: $SETTINGS.bak)"
 ZSHRC="$HOME/.zshrc"
 touch "$ZSHRC"
 
-# Append a line to ~/.zshrc only if a marker isn't already present.
-append_once() {  # $1 = grep marker, $2 = line to append
+# Append a line/block to ~/.zshrc only if its marker isn't already present.
+# ⚠️ Marker-gated and APPEND-ONLY. If you later *edit* one of the blocks below, this will NOT
+#    update machines that already ran bootstrap: their ~/.zshrc still has the marker, so this
+#    skips and the old line stays. Editing an existing block is a two-place change — update it
+#    here (for fresh machines) AND hand-edit the live ~/.zshrc on each bootstrapped machine.
+#    See HOWTO.md → "Changing an existing alias". (Adding a NEW block with a NEW marker is fine.)
+append_once() {  # $1 = unique grep marker, $2 = line/block to append once
   if ! grep -q "$1" "$ZSHRC"; then
     printf '\n%s\n' "$2" >> "$ZSHRC"
     log "added to $ZSHRC: $2"
