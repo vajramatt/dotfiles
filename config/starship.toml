@@ -1,11 +1,109 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+palette = "tokyonight"
+
+# Two-line frame: ╭─ … on top, ╰─☸ keel on the bottom (the keel lives in [character]).
+format = """
+[╭─](frame)$os$directory$git_branch$git_state$git_status$cmd_duration
+$character"""
+
+# Right side: runtime versions + clock, so the left stays clean.
+right_format = """$nodejs$bun$python$rust$golang$docker_context$time"""
+
+[palettes.tokyonight]
+frame   = "#7dcfff"
+fg      = "#c0caf5"
+blue    = "#7aa2f7"
+cyan    = "#7dcfff"
+green   = "#9ece6a"
+magenta = "#bb9af7"
+red     = "#f7768e"
+yellow  = "#e0af68"
+orange  = "#ff9e64"
+gray    = "#565f89"
+
+[os]
+disabled = false
+style = "fg"
+[os.symbols]
+Macos = " "
+
+[directory]
+style = "bold blue"
+truncation_length = 3
+truncate_to_repo = true
+read_only = "  "
+read_only_style = "red"
+home_symbol = "  ~"
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+
+[git_branch]
+symbol = " "
+style = "bold magenta"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "red"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+up_to_date = "[ ](green)"
+untracked = "?${count}"
+stashed = "*${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[git_state]
+style = "bold yellow"
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+
+[cmd_duration]
+min_time = 500
+style = "bold yellow"
+format = "[  $duration]($style) "
+
+[nodejs]
+symbol = " "
+style = "green"
+format = "[$symbol($version )]($style)"
+
+[bun]
+symbol = " "
+style = "fg"
+format = "[$symbol($version )]($style)"
+
+[python]
+symbol = " "
+style = "yellow"
+format = "[$symbol($version )]($style)"
+
+[rust]
+symbol = " "
+style = "orange"
+format = "[$symbol($version )]($style)"
+
+[golang]
+symbol = " "
+style = "cyan"
+format = "[$symbol($version )]($style)"
+
+[docker_context]
+symbol = " "
+style = "blue"
+format = "[$symbol$context]($style) "
+only_with_files = true
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "gray"
+format = "[  $time]($style)"
 
 [character]
-success_symbol = "[╰─☸](bold cyan)"
-error_symbol = "[╰─☸](bold red)"
-
-[line_break]
-disabled = false
-
-[format]
-format = """╭─$directory$git_branch$git_status
-$character """
+success_symbol = "[╰─☸ ](bold cyan)"
+error_symbol = "[╰─☸ ](bold red)"
