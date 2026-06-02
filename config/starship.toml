@@ -31,8 +31,8 @@ Macos = " "
 
 [directory]
 style = "bold blue"
-truncation_length = 3
-truncate_to_repo = true
+truncation_length = 0
+truncate_to_repo = false
 read_only = "  "
 read_only_style = "red"
 home_symbol = "🏠"
