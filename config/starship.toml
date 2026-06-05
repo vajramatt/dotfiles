@@ -9,7 +9,7 @@ format = """
 $character"""
 
 # Right side: runtime versions + clock, so the left stays clean.
-right_format = """$nodejs$bun$python$rust$golang$docker_context$time"""
+right_format = """$nodejs$bun$python$rust$golang$php$docker_context$time"""
 
 [palettes.tokyonight]
 frame   = "#7dcfff"
@@ -37,6 +37,12 @@ read_only = "  "
 read_only_style = "red"
 home_symbol = "🏠"
 format = "[ $path ]($style)[$read_only]($read_only_style)"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
 
 [git_branch]
 symbol = " "
@@ -90,6 +96,11 @@ format = "[$symbol($version )]($style)"
 [golang]
 symbol = " "
 style = "cyan"
+format = "[$symbol($version )]($style)"
+
+[php]
+symbol = " "
+style = "magenta"
 format = "[$symbol($version )]($style)"
 
 [docker_context]
