@@ -1,13 +1,6 @@
 # dotfiles
 
-```
-██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
-██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
-██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
-██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
-██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
-╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
-```
+![dotfiles — figlet ANSI Shadow in a TokyoNight gradient](docs/banner.svg)
 
 My Mac terminal setup: **Ghostty** + **Starship** + **eza** + the **TokyoNight** Claude Code statusline.
 
@@ -71,6 +64,10 @@ config/
   hal.zsh              # transient prompt + HAL command-not-found + long-command notifications
 claude/
   hooks/statusline.sh  # TokyoNight statusline
+docs/
+  banner.mjs           # regenerates banner.svg (figlet + TokyoNight gradient, zero deps)
+  banner.svg           # the README banner
+  motd.png             # the README screenshot
 bootstrap.sh
 ```
 
