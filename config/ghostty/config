@@ -2,8 +2,8 @@
 # Docs: https://ghostty.org/docs/config
 
 # TokyoNight Night — matches the Claude statusline palette
-theme = "TokyoNight Night"
-
+#theme = "TokyoNight Night"
+theme = solarpunk-night
 # JetBrainsMono Nerd Font — glyphs for eza icons + starship prompt
 font-family = "JetBrainsMono Nerd Font Mono"
 font-size = 14
