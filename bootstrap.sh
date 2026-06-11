@@ -5,6 +5,7 @@
 #   - Ghostty config, TokyoNight Night  (~/.config/ghostty/config)
 #   - MOTD greeting on new terminals  (~/.config/motd.sh, sourced from ~/.zshrc)
 #   - Claude Code TokyoNight statusline  (~/.claude/hooks/statusline.sh + settings.json)
+#   - Claude Code git attribution off  (no Co-Authored-By trailer in commits/PRs)
 #
 # Usage:
 #   git clone https://github.com/vajramatt/dotfiles.git ~/dotfiles
@@ -77,9 +78,10 @@ mkdir -p "$CLAUDE_DIR"
 cp "$SETTINGS" "$SETTINGS.bak"
 tmp="$(mktemp)"
 jq --arg cmd "$CLAUDE_DIR/hooks/statusline.sh" \
-   '.statusLine = {type: "command", command: $cmd, refreshInterval: 30}' \
+   '.statusLine = {type: "command", command: $cmd, refreshInterval: 30}
+    | .attribution = {commit: "", pr: ""}' \
    "$SETTINGS" > "$tmp" && mv "$tmp" "$SETTINGS"
-log "merged statusLine into $SETTINGS (backup: $SETTINGS.bak)"
+log "merged statusLine + attribution into $SETTINGS (backup: $SETTINGS.bak)"
 
 # 6. Ensure starship + zsh plugins initialize in zsh ----------------------
 ZSHRC="$HOME/.zshrc"
