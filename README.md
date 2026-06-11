@@ -21,9 +21,11 @@ Then open a new terminal (or `exec zsh`).
 3. Symlinks the configs into place (backing up anything already there to `*.bak.<timestamp>`):
    - `~/.config/starship.toml` → two-line prompt: `╭─` directory + git branch/status + runtime versions/clock, then the `╰─☸` keel
    - `~/.config/ghostty/config` → TokyoNight Night theme + `JetBrainsMono Nerd Font Mono`
+   - `~/.config/motd.sh` → TokyoNight MOTD on every new terminal: compact HAL 9000 eye beside user@host, date/uptime, memory/load/battery, disk/LAN IP, and a time-aware HAL quote; low battery/disk turn red (`export MOTD_HAL=0` for the plain greeting)
+   - `~/.config/hal.zsh` → HAL zsh extras: transient prompt (old prompts collapse to `☸ cmd`; `export TRANSIENT_PROMPT=0` to disable), command-not-found in HAL's voice, macOS notification when a command runs ≥30s
    - `~/.claude/hooks/statusline.sh` → TokyoNight statusline for Claude Code
 4. Merges the `statusLine` block into `~/.claude/settings.json` (rest of the file is left untouched; a `.bak` is kept).
-5. Ensures `~/.zshrc` sources **zsh-autosuggestions** (fish-style ghost text), `eval "$(starship init zsh)"`, the **eza** aliases (`ls`/`la`/`ll`/`lt`), and **zsh-syntax-highlighting** (sourced last, as it requires).
+5. Ensures `~/.zshrc` sources **zsh-autosuggestions** (fish-style ghost text), `eval "$(starship init zsh)"`, the **eza** aliases (`ls`/`la`/`ll`/`lt`), the **MOTD** greeting, and **zsh-syntax-highlighting** (sourced last, as it requires).
 
 It's **idempotent** — safe to re-run.
 
@@ -33,6 +35,9 @@ It's **idempotent** — safe to re-run.
 config/
   starship.toml        # Starship prompt
   ghostty/config       # Ghostty terminal
+  motd.sh              # MOTD greeting (sourced from ~/.zshrc)
+  hal9000.sh           # truecolor HAL 9000 eye (zsh-rendered; sized via arg, used by motd.sh)
+  hal.zsh              # transient prompt + HAL command-not-found + long-command notifications
 claude/
   hooks/statusline.sh  # TokyoNight statusline
 bootstrap.sh

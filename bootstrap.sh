@@ -3,6 +3,7 @@
 #   - Homebrew + starship, jq, zsh-autosuggestions, zsh-syntax-highlighting, ghostty
 #   - Starship prompt config  (~/.config/starship.toml)
 #   - Ghostty config, TokyoNight Night  (~/.config/ghostty/config)
+#   - MOTD greeting on new terminals  (~/.config/motd.sh, sourced from ~/.zshrc)
 #   - Claude Code TokyoNight statusline  (~/.claude/hooks/statusline.sh + settings.json)
 #
 # Usage:
@@ -56,6 +57,16 @@ link "$REPO_DIR/config/starship.toml" "$CONFIG_DIR/starship.toml"
 # 4. Ghostty ---------------------------------------------------------------
 link "$REPO_DIR/config/ghostty/config" "$CONFIG_DIR/ghostty/config"
 
+# 4b. MOTD (sourced from ~/.zshrc — see append_once below) ------------------
+link "$REPO_DIR/config/motd.sh" "$CONFIG_DIR/motd.sh"
+
+# 4c. HAL 9000 eye (rendered into the MOTD; run standalone for full size) ---
+chmod +x "$REPO_DIR/config/hal9000.sh"
+link "$REPO_DIR/config/hal9000.sh" "$CONFIG_DIR/hal9000.sh"
+
+# 4d. HAL zsh extras (transient prompt, command-not-found, notifications) ----
+link "$REPO_DIR/config/hal.zsh" "$CONFIG_DIR/hal.zsh"
+
 # 5. Claude Code TokyoNight statusline ------------------------------------
 chmod +x "$REPO_DIR/claude/hooks/statusline.sh"
 link "$REPO_DIR/claude/hooks/statusline.sh" "$CLAUDE_DIR/hooks/statusline.sh"
@@ -99,6 +110,14 @@ alias ls='\''eza --icons --group-directories-first'\''
 alias la='\''eza -a --icons --group-directories-first'\''
 alias ll='\''eza -la --git --icons --group-directories-first'\''
 alias lt='\''eza --tree --level=2 --icons'\'''
+
+# MOTD — TokyoNight greeting on every new interactive shell.
+append_once '# motd greeting' '# motd greeting
+[[ -o interactive ]] && source "$HOME/.config/motd.sh"'
+
+# HAL zsh extras — must come after `starship init zsh` (transient prompt swaps PROMPT).
+append_once '# hal zsh extras' '# hal zsh extras
+[[ -o interactive ]] && source "$HOME/.config/hal.zsh"'
 
 # zsh-syntax-highlighting must be sourced LAST — append it after everything else.
 append_once 'zsh-syntax-highlighting' "source \"$BREW/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\""

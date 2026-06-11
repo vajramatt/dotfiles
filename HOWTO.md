@@ -91,7 +91,9 @@ cd ~/code/dotfiles && git add -A && git commit -m "describe change" && git push
 ## Current setup at a glance
 
 - **Shell:** zsh + zsh-autosuggestions + zsh-syntax-highlighting
-- **Prompt:** Starship, TokyoNight palette, two-line frame ending in the `╰─☸` keel
+- **Prompt:** Starship, TokyoNight palette, two-line frame ending in the `╰─☸` keel; on failure the keel becomes HAL's eye (`╰─◉`) with the exit code quoted on the top line; a `custom.cloudflare` badge marks wrangler repos (red `⚠ prod!` on main/master); battery appears right-side only when ≤20%
+- **HAL zsh extras:** `config/hal.zsh` (symlinked, sourced from `~/.zshrc` after starship init) — transient prompt collapsing past prompts to `☸ cmd` (`export TRANSIENT_PROMPT=0` to disable), command-not-found in HAL's voice, macOS notification for commands ≥30s
 - **Terminal:** Ghostty, TokyoNight Night, `JetBrainsMono Nerd Font Mono` @ 14pt
 - **`ls`:** aliased to `eza` (`ls`/`la`/`ll`/`lt`) — icons, git status, dir-grouping
+- **MOTD:** `config/motd.sh` (symlinked to `~/.config/motd.sh`, sourced from `~/.zshrc`) — compact HAL 9000 eye (`config/hal9000.sh`) beside user@host, date/uptime, memory/load/battery, disk/LAN IP, and a time-of-day HAL quote; battery ≤20% (discharging) and disk <50G render red, uptime >30d changes the quote to "Dave, my mind is going" — `export MOTD_HAL=0` reverts to the plain greeting, `~/.config/hal9000.sh` renders the full-size eye
 - **Claude Code:** TokyoNight statusline

@@ -4,12 +4,13 @@ add_newline = true
 palette = "tokyonight"
 
 # Two-line frame: ╭─ … on top, ╰─☸ keel on the bottom (the keel lives in [character]).
+# Cloudflare badges + HAL status quote ride the top line; battery only appears ≤20%.
 format = """
-[╭─](frame)$os$directory$git_branch$git_state$git_status$cmd_duration
+[╭─](frame)$os$directory$git_branch$git_state$git_status${custom.cloudflare}${custom.cloudflare_prod}$cmd_duration$status
 $character"""
 
 # Right side: runtime versions + clock, so the left stays clean.
-right_format = """$nodejs$bun$python$rust$golang$php$docker_context$time"""
+right_format = """$battery$nodejs$bun$python$rust$golang$php$docker_context$time"""
 
 [palettes.tokyonight]
 frame   = "#7dcfff"
@@ -117,4 +118,52 @@ format = "[  $time]($style)"
 
 [character]
 success_symbol = "[╰─☸ ](bold cyan)"
-error_symbol = "[╰─☸ ](bold red)"
+error_symbol = "[╰─◉ ](bold red)"   # the keel becomes HAL's eye on failure
+
+# HAL announces the exit code of a failed command on the top line.
+[status]
+disabled = false
+style = "bold red"
+format = "[◉ $status — I'm afraid I can't do that, Dave]($style) "
+
+# Battery: invisible until ≤20%, then red on the right side.
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+format = "[$symbol$percentage]($style) "
+
+[[battery.display]]
+threshold = 20
+style = "bold red"
+
+# Cloudflare tripwire: a wrangler config in the repo root means deploys are real.
+# Cyan badge on a safe branch; red PROD warning on main/master — house rule:
+# never `wrangler deploy` without explicit per-deploy approval.
+[custom.cloudflare]
+description = "wrangler repo on a non-main branch"
+shell = ["sh"]
+when = '''
+r=$(git rev-parse --show-toplevel 2>/dev/null) || r="$PWD"
+[ -f "$r/wrangler.toml" ] || [ -f "$r/wrangler.jsonc" ] || [ -f "$r/wrangler.json" ] || exit 1
+b=$(git branch --show-current 2>/dev/null)
+[ "$b" != "main" ] && [ "$b" != "master" ]
+'''
+command = "echo wrangler"
+symbol = " "
+style = "cyan"
+format = "[$symbol$output]($style) "
+
+[custom.cloudflare_prod]
+description = "wrangler repo on main/master — deploys hit prod"
+shell = ["sh"]
+when = '''
+r=$(git rev-parse --show-toplevel 2>/dev/null) || r="$PWD"
+[ -f "$r/wrangler.toml" ] || [ -f "$r/wrangler.jsonc" ] || [ -f "$r/wrangler.json" ] || exit 1
+b=$(git branch --show-current 2>/dev/null)
+[ "$b" = "main" ] || [ "$b" = "master" ]
+'''
+command = "echo prod!"
+symbol = " "
+style = "bold red"
+format = "[$symbol⚠ $output]($style) "
