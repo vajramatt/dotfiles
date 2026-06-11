@@ -1,9 +1,40 @@
 # dotfiles
 
+```
+██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗
+██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝
+██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗
+██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║
+██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║
+╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝
+```
+
 My Mac terminal setup: **Ghostty** + **Starship** + **eza** + the **TokyoNight** Claude Code statusline.
 
 > Syncing to another Mac or making changes? See **[HOWTO.md](HOWTO.md)** for how changes
 > propagate (symlinked configs are instant; packages/aliases need a `bootstrap.sh` re-run).
+
+## The HAL 9000 stuff
+
+![The MOTD: HAL eye, live stats, a quote — and the prod tripwire in the prompt below](docs/motd.png)
+
+Every new terminal opens with a truecolor HAL 9000 eye — rendered in pure zsh with
+half-block pixels (~20 ms, no image files, no figlet dependency) — beside live stats
+(memory, load, battery, disk, LAN IP) and a time-of-day HAL quote. Battery and disk turn
+red when low, and past 30 days of uptime the quote locks to *"Dave, my mind is going."*
+
+The prompt is in on it too:
+
+- a failed command turns the Starship keel into HAL's eye — `╰─◉` — with
+  *"I'm afraid I can't do that, Dave"* and the exit code on the top line
+- typos get the full *"I'm sorry, Dave. I'm afraid I can't do that."*
+- wrangler repos show a Cloudflare badge that flips to a red **⚠ prod!** on
+  main/master (visible in the screenshot above)
+- commands running ≥30s send a macOS notification: *"Processing complete, Dave."*
+- past prompts collapse to a single `☸ cmd` line, so scrollback stays clean
+
+Escape hatches: `export MOTD_HAL=0` (plain greeting) and `export TRANSIENT_PROMPT=0`
+(keep full prompts in scrollback). Full-size eye: `~/.config/hal9000.sh 19`.
 
 ## One-command setup on a new Mac
 
