@@ -69,6 +69,42 @@ CD=$'\033[38;2;86;95;137m'     # #565f89 comment  — separators + dim labels
 
 SEP=" ${CD}▏${RS} "
 
+# ── Context gauge ─────────────────────────────────────────────────────────────
+# Gradient-filled bar, green → yellow → orange → red across the full width.
+GAUGE_CELLS=10
+
+grad_rgb() { # $1: cell index 0..GAUGE_CELLS-1 → "R;G;B" along the gradient
+  local i=$1 t seg f r g b
+  local R=(158 224 255 247) G=(206 175 158 118) B=(106 104 100 142)
+  t=$(( i * 300 / (GAUGE_CELLS - 1) ))
+  seg=$(( t / 100 )); f=$(( t % 100 ))
+  [ "$seg" -ge 3 ] && { seg=2; f=100; }
+  r=$(( ${R[$seg]} + ( (${R[$((seg+1))]} - ${R[$seg]}) * f ) / 100 ))
+  g=$(( ${G[$seg]} + ( (${G[$((seg+1))]} - ${G[$seg]}) * f ) / 100 ))
+  b=$(( ${B[$seg]} + ( (${B[$((seg+1))]} - ${B[$seg]}) * f ) / 100 ))
+  printf '%d;%d;%d' "$r" "$g" "$b"
+}
+
+CTX_GAUGE=""
+if [ -n "$CTX_PCT" ]; then
+  P=$(printf '%s' "${CTX_PCT%%.*}" | tr -cd '0-9'); P=${P:-0}
+  [ "$P" -gt 100 ] && P=100
+  FILLED=$(( (P * GAUGE_CELLS + 50) / 100 ))
+  [ "$P" -gt 0 ] && [ "$FILLED" -eq 0 ] && FILLED=1
+  BAR="" PCOL="$CG" i=0
+  while [ "$i" -lt "$GAUGE_CELLS" ]; do
+    if [ "$i" -lt "$FILLED" ]; then
+      RGB=$(grad_rgb "$i")
+      BAR+=$'\033[38;2;'"${RGB}m▰"
+      PCOL=$'\033[38;2;'"${RGB}m"
+    else
+      BAR+="${CD}▱"
+    fi
+    i=$((i + 1))
+  done
+  CTX_GAUGE="${BAR}${RS} ${PCOL}${P}%${RS}"
+fi
+
 # ── Render ────────────────────────────────────────────────────────────────────
 printf '%s' "${CP}${BD} ${PROJECT}${RS}"
 [ -n "$MODEL" ] && printf '%s' " ${CM}${DM}${MODEL}${RS}"
@@ -84,6 +120,7 @@ if [ -n "$COST" ]; then
   printf '%s' "$SEP"
   printf '%s' "${CR}${COST}${RS}"
 fi
-if [ -n "$CTX_PCT" ]; then
-  printf '%s' " ${CD}ctx${RS}${DM}${CTX_PCT}%${RS}"
+if [ -n "$CTX_GAUGE" ]; then
+  printf '%s' "$SEP"
+  printf '%s' "$CTX_GAUGE"
 fi
