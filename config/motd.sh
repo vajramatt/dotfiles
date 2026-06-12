@@ -64,6 +64,12 @@ motd() {
   ip=$(ipconfig getifaddr "${iface:-en0}" 2>/dev/null)
   [[ -z $ip ]] && ip="offline"
 
+  # Machine identity — the keeper bits from the old fastfetch banner (static, cheap).
+  # OS version + chip; HAL already covers the live vitals (uptime/mem/load/disk/IP).
+  local os_ver chip
+  os_ver=$(sw_vers -productVersion 2>/dev/null)
+  chip=$(sysctl -n machdep.cpu.brand_string 2>/dev/null)
+
   # --- the quote ------------------------------------------------------------
   local hour quote
   hour=$(date +%H); hour=${hour#0}
@@ -88,6 +94,7 @@ motd() {
   local when="${gray}$(date '+%a %d %b, %H:%M') · up ${uptime_str}${reset}"
   local vitals="${gray}󰍛 ${mem_used}/${mem_total}G ·  ${loadavg}${batt_seg}${reset}"
   local space="${dcol}󰋊 ${disk_free} free${reset}${gray} · 󰩟 ${ip}${reset}"
+  local ident="${gray}󰀵 macOS ${os_ver} · ${chip}${reset}"
   local words="${gray}${italic}\"${quote}\"${reset}"
 
   print
@@ -96,6 +103,7 @@ motd() {
     local -a eye
     eye=( "${(@f)$(source "$HOME/.config/hal9000.sh" 9 nocaption)}" )
     eye[2]+="   ${frame}☸${reset}  ${who}"
+    eye[3]+="   ${ident}"
     eye[4]+="   ${when}"
     eye[5]+="   ${vitals}"
     eye[6]+="   ${space}"
@@ -103,7 +111,7 @@ motd() {
     print -rl -- "${eye[@]}"
   else
     print -r -- "${frame}☸  ${who}"
-    print -rl -- "   ${when}" "   ${vitals}" "   ${space}" "   ${words}"
+    print -rl -- "   ${ident}" "   ${when}" "   ${vitals}" "   ${space}" "   ${words}"
   fi
 }
 
