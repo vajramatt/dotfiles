@@ -4,3 +4,6 @@
 
 # macOS
 .DS_Store
+
+# build intermediate for the staged README screenshot
+docs/motd.ansi

@@ -11,6 +11,8 @@ My Mac terminal setup: **Ghostty** + **Starship** + **eza** + the **TokyoNight**
 
 ![The MOTD: HAL eye, live stats, a quote — and the prod tripwire in the prompt below](docs/motd.png)
 
+*(Screenshot is staged — `dave @ discovery-one` and friends come from `docs/motd-shot.zsh`, not a real machine.)*
+
 Every new terminal opens with a truecolor HAL 9000 eye — rendered in pure zsh with
 half-block pixels (~20 ms, no image files, no figlet dependency) — beside live stats
 (memory, load, battery, disk, LAN IP) and a time-of-day HAL quote. Battery and disk turn
@@ -67,7 +69,9 @@ claude/
 docs/
   banner.mjs           # regenerates banner.svg (figlet + TokyoNight gradient, zero deps)
   banner.svg           # the README banner
-  motd.png             # the README screenshot
+  motd-shot.zsh        # captures motd.sh with staged demo data -> motd.ansi
+  motd-shot.mjs        # renders motd.ansi -> motd.png via headless Chrome
+  motd.png             # the README screenshot (staged: dave@discovery-one, fake stats)
 bootstrap.sh
 ```
 
