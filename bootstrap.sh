@@ -3,7 +3,7 @@
 #   - Homebrew + starship, jq, zsh-autosuggestions, zsh-syntax-highlighting, ghostty
 #   - Starship prompt config  (~/.config/starship.toml)
 #   - Ghostty config, TokyoNight Night  (~/.config/ghostty/config)
-#   - MOTD greeting on new terminals  (~/.config/motd.sh, sourced from ~/.zshrc)
+#   - Ghostwheel (Amber) MOTD on new terminals  (~/.config/motd.sh + ghostwheel_amber.ansi)
 #   - Claude Code TokyoNight statusline  (~/.claude/hooks/statusline.sh + settings.json)
 #   - Claude Code git attribution off  (no Co-Authored-By trailer in commits/PRs)
 #
@@ -61,11 +61,16 @@ link "$REPO_DIR/config/ghostty/config" "$CONFIG_DIR/ghostty/config"
 # 4b. MOTD (sourced from ~/.zshrc — see append_once below) ------------------
 link "$REPO_DIR/config/motd.sh" "$CONFIG_DIR/motd.sh"
 
-# 4c. HAL 9000 eye (rendered into the MOTD; run standalone for full size) ---
+# 4c. Ghostwheel emblem (Amber MOTD art — read by motd.sh as a static .ansi) -
+link "$REPO_DIR/config/ghostwheel_amber.ansi" "$CONFIG_DIR/ghostwheel_amber.ansi"
+
+# 4d. HAL 9000 eye (retired to Shadow; unreferenced by the Amber MOTD but kept
+#     linked + recoverable — run standalone for the full-size eye) -----------
 chmod +x "$REPO_DIR/config/hal9000.sh"
 link "$REPO_DIR/config/hal9000.sh" "$CONFIG_DIR/hal9000.sh"
 
-# 4d. HAL zsh extras (transient prompt, command-not-found, notifications) ----
+# 4e. zsh extras: `walk` + transient prompt, command-not-found, notifications
+#     (Ghost-voiced; HAL originals preserved in a commented block in the file) -
 link "$REPO_DIR/config/hal.zsh" "$CONFIG_DIR/hal.zsh"
 
 # 5. Claude Code TokyoNight statusline ------------------------------------
@@ -117,7 +122,9 @@ alias lt='\''eza --tree --level=2 --icons'\'''
 append_once '# motd greeting' '# motd greeting
 [[ -o interactive ]] && source "$HOME/.config/motd.sh"'
 
-# HAL zsh extras — must come after `starship init zsh` (transient prompt swaps PROMPT).
+# Amber zsh extras (walk + Ghost voice) — must come after `starship init zsh`
+# (transient prompt swaps PROMPT). Marker text is unchanged so already-bootstrapped
+# machines don't get a duplicate source line; the file it points to is now Amber.
 append_once '# hal zsh extras' '# hal zsh extras
 [[ -o interactive ]] && source "$HOME/.config/hal.zsh"'
 
