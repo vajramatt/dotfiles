@@ -42,10 +42,10 @@ Ghost also has hands in the shell: command-not-found answers in character, a `�
 command fires a macOS notification, and past prompts collapse to a single `✶ cmd` line so
 scrollback stays clean.
 
-The **prompt keeps HAL's eye** as a deliberate keepsake (`config/starship.toml`,
-untouched): the `╰─☸` keel, and on a failed command the keel becomes the red eye `╰─◉`
-with *"I'm afraid I can't do that, Dave"* and the exit code on the top line. Wrangler repos
-still show a Cloudflare badge that flips to a red **⚠ prod!** on main/master.
+The **prompt carries Ghostwheel's eye** (`config/starship.toml`): the `╰─☸` keel, and on a
+failed command the keel becomes the red eye `╰─◉` with *"that Shadow won't yield, Dad"* and
+the exit code on the top line. Wrangler repos still show a Cloudflare badge that flips to a
+red **⚠ prod!** on main/master.
 
 Escape hatches: `export MOTD_EMBLEM=0` (plain stacked greeting, no emblem) and
 `export TRANSIENT_PROMPT=0` (keep full prompts in scrollback). The retired HAL 9000 eye

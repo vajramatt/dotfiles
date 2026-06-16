@@ -118,13 +118,13 @@ format = "[  $time]($style)"
 
 [character]
 success_symbol = "[╰─☸ ](bold cyan)"
-error_symbol = "[╰─◉ ](bold red)"   # the keel becomes HAL's eye on failure
+error_symbol = "[╰─◉ ](bold red)"   # the keel becomes Ghostwheel's eye on failure
 
-# HAL announces the exit code of a failed command on the top line.
+# Ghostwheel announces the exit code of a failed command on the top line.
 [status]
 disabled = false
 style = "bold red"
-format = "[◉ $status — I'm afraid I can't do that, Dave]($style) "
+format = "[◉ $status — that Shadow won't yield, Dad]($style) "
 
 # Battery: invisible until ≤20%, then red on the right side.
 [battery]
