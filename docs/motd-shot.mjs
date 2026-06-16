@@ -13,7 +13,7 @@ import { tmpdir } from 'node:os';
 const docs = dirname(fileURLToPath(import.meta.url));
 const ansi = readFileSync(join(docs, 'motd.ansi'), 'utf8');
 
-const BG = '#101012'; // the HAL eye's matte color — must match or the eye sits in a box
+const BG = '#101012'; // terminal matte; the emblem rides on it with no box
 const FG = '#c0caf5';
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 

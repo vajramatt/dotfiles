@@ -7,29 +7,49 @@ My Mac terminal setup: **Ghostty** + **Starship** + **eza** + the **TokyoNight**
 > Syncing to another Mac or making changes? See **[HOWTO.md](HOWTO.md)** for how changes
 > propagate (symlinked configs are instant; packages/aliases need a `bootstrap.sh` re-run).
 
-## The HAL 9000 stuff
+## The Ghostwheel (Amber) stuff
 
-![The MOTD: HAL eye, live stats, a quote — and the prod tripwire in the prompt below](docs/motd.png)
+![The MOTD: the Ghostwheel emblem, live stats, a rotating Amber line, and the Shadow you ride toward — with the prod tripwire in the prompt below](docs/motd.png)
 
-*(Screenshot is staged — `dave @ discovery-one` and friends come from `docs/motd-shot.zsh`, not a real machine.)*
+*(Screenshot is staged — `matthew @ amber`, `chainproof-ledger`, and the stats come from `docs/motd-shot.zsh` against a throwaway `$HOME`, not a real machine.)*
 
-Every new terminal opens with a truecolor HAL 9000 eye — rendered in pure zsh with
-half-block pixels (~20 ms, no image files, no figlet dependency) — beside live stats
-(memory, load, battery, disk, LAN IP) and a time-of-day HAL quote. Battery and disk turn
-red when low, and past 30 days of uptime the quote locks to *"Dave, my mind is going."*
+The resident intelligence is **Ghostwheel** — "Ghost" — Merlin's construct from Roger
+Zelazny's *Chronicles of Amber*, a spinning wheel of light that maps Shadow. A terminal
+is a threshold; opening one is walking the Pattern. Every new shell, Ghost greets me by
+name beside a truecolor braille emblem (a static 32×16 `.ansi`, read with zsh's `$(<file)`
+builtin — ~0.1 ms, no image protocol, portable over SSH/tmux). To its right: live stats
+(memory, load, battery, disk, LAN IP) plus a static OS/chip identity line. Battery and disk
+turn red when low.
 
-The prompt is in on it too:
+Ghost's greeting has three moving parts, all spare and hand-written — no random wisdom:
 
-- a failed command turns the Starship keel into HAL's eye — `╰─◉` — with
-  *"I'm afraid I can't do that, Dave"* and the exit code on the top line
-- typos get the full *"I'm sorry, Dave. I'm afraid I can't do that."*
-- wrangler repos show a Cloudflare badge that flips to a red **⚠ prod!** on
-  main/master (visible in the screenshot above)
-- commands running ≥30s send a macOS notification: *"Processing complete, Dave."*
-- past prompts collapse to a single `☸ cmd` line, so scrollback stays clean
+- a **time-aware line** (morning/afternoon/evening; after dark by `America/Chicago` it
+  invokes **Tir-na Nog'th**, the city that appears only by moonlight)
+- one **rotating Amber texture line** — the Pattern, hellriding through Shadow, Kolvir,
+  the Trumps — drawn from a small curated set, rotating *daily* so it never flickers
+- the **Shadow I ride toward**: the day's intent, set with `walk` (below); if none is set,
+  Ghost asks which Shadow I mean to walk to
 
-Escape hatches: `export MOTD_HAL=0` (plain greeting) and `export TRANSIENT_PROMPT=0`
-(keep full prompts in scrollback). Full-size eye: `~/.config/hal9000.sh 19`.
+**`walk` — the intention mechanic** (in `config/hal.zsh`, stored at `~/.amber/shadow`):
+
+```bash
+walk "ship the chainproof ledger spec"   # set the day's Shadow
+walk                                      # show the current Shadow
+walk --arrived                            # clear it, in-world
+```
+
+Ghost also has hands in the shell: command-not-found answers in character, a `≥30s`
+command fires a macOS notification, and past prompts collapse to a single `✶ cmd` line so
+scrollback stays clean.
+
+The **prompt keeps HAL's eye** as a deliberate keepsake (`config/starship.toml`,
+untouched): the `╰─☸` keel, and on a failed command the keel becomes the red eye `╰─◉`
+with *"I'm afraid I can't do that, Dave"* and the exit code on the top line. Wrangler repos
+still show a Cloudflare badge that flips to a red **⚠ prod!** on main/master.
+
+Escape hatches: `export MOTD_EMBLEM=0` (plain stacked greeting, no emblem) and
+`export TRANSIENT_PROMPT=0` (keep full prompts in scrollback). The retired HAL 9000 eye
+lives on in `config/hal9000.sh` — `~/.config/hal9000.sh 19` still renders it full-size.
 
 ## One-command setup on a new Mac
 
@@ -47,8 +67,8 @@ Then open a new terminal (or `exec zsh`).
 3. Symlinks the configs into place (backing up anything already there to `*.bak.<timestamp>`):
    - `~/.config/starship.toml` → two-line prompt: `╭─` directory + git branch/status + runtime versions/clock, then the `╰─☸` keel
    - `~/.config/ghostty/config` → TokyoNight Night theme + `JetBrainsMono Nerd Font Mono`
-   - `~/.config/motd.sh` → TokyoNight MOTD on every new terminal: compact HAL 9000 eye beside user@host, date/uptime, memory/load/battery, disk/LAN IP, and a time-aware HAL quote; low battery/disk turn red (`export MOTD_HAL=0` for the plain greeting)
-   - `~/.config/hal.zsh` → HAL zsh extras: transient prompt (old prompts collapse to `☸ cmd`; `export TRANSIENT_PROMPT=0` to disable), command-not-found in HAL's voice, macOS notification when a command runs ≥30s
+   - `~/.config/motd.sh` (+ `~/.config/ghostwheel_amber.ansi`) → TokyoNight MOTD on every new terminal: the Ghostwheel emblem beside user@host, OS/chip identity, date/uptime, memory/load/battery, disk/LAN IP, a time-aware greeting (Tir-na Nog'th after dark), a rotating Amber line, and the Shadow you ride toward; low battery/disk turn red (`export MOTD_EMBLEM=0` for the plain greeting)
+   - `~/.config/hal.zsh` → zsh extras: `walk` (sets the day's Shadow), transient prompt (old prompts collapse to `✶ cmd`; `export TRANSIENT_PROMPT=0` to disable), command-not-found in Ghost's voice, macOS notification when a command runs ≥30s
    - `~/.claude/hooks/statusline.sh` → TokyoNight statusline for Claude Code
 4. Merges the `statusLine` block into `~/.claude/settings.json` (rest of the file is left untouched; a `.bak` is kept).
 5. Ensures `~/.zshrc` sources **zsh-autosuggestions** (fish-style ghost text), `eval "$(starship init zsh)"`, the **eza** aliases (`ls`/`la`/`ll`/`lt`), the **MOTD** greeting, and **zsh-syntax-highlighting** (sourced last, as it requires).
@@ -59,19 +79,20 @@ It's **idempotent** — safe to re-run.
 
 ```
 config/
-  starship.toml        # Starship prompt
-  ghostty/config       # Ghostty terminal
-  motd.sh              # MOTD greeting (sourced from ~/.zshrc)
-  hal9000.sh           # truecolor HAL 9000 eye (zsh-rendered; sized via arg, used by motd.sh)
-  hal.zsh              # transient prompt + HAL command-not-found + long-command notifications
+  starship.toml          # Starship prompt (still HAL: ☸ keel, ◉ red eye on failure)
+  ghostty/config         # Ghostty terminal
+  motd.sh                # Ghostwheel (Amber) MOTD greeting (sourced from ~/.zshrc)
+  ghostwheel_amber.ansi  # the 32×16 truecolor braille emblem, read by motd.sh
+  hal9000.sh             # retired HAL 9000 eye (zsh-rendered; standalone, unused by the MOTD)
+  hal.zsh                # walk + transient prompt + Ghost command-not-found + long-command notifications
 claude/
-  hooks/statusline.sh  # TokyoNight statusline
+  hooks/statusline.sh    # TokyoNight statusline
 docs/
-  banner.mjs           # regenerates banner.svg (figlet + TokyoNight gradient, zero deps)
-  banner.svg           # the README banner
-  motd-shot.zsh        # captures motd.sh with staged demo data -> motd.ansi
-  motd-shot.mjs        # renders motd.ansi -> motd.png via headless Chrome
-  motd.png             # the README screenshot (staged: dave@discovery-one, fake stats)
+  banner.mjs             # regenerates banner.svg (figlet + TokyoNight gradient, zero deps)
+  banner.svg             # the README banner
+  motd-shot.zsh          # captures motd.sh with staged demo data -> motd.ansi
+  motd-shot.mjs          # renders motd.ansi -> motd.png via headless Chrome
+  motd.png               # the README screenshot (staged: matthew@amber, fake stats)
 bootstrap.sh
 ```
 
